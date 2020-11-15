@@ -10,6 +10,7 @@
     "@rollup/plugin-commonjs": "^16.0.0",
     "@rollup/plugin-node-resolve": "^10.0.0",
     "@rollup/plugin-replace": "^2.3.4",
+    "patch-package": "^6.2.2",
     "prettier": "^2.1.2",
     "react": "^17.0.1",
     "react-dom": "^17.0.1",

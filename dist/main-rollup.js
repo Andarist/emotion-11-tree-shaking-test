@@ -1,4 +1,4 @@
-import { createContext, useContext } from "react";
+import { useContext, createContext } from "react";
 var StyleSheet = (function () {
     function StyleSheet(options) {
       var _this = this;
@@ -628,275 +628,84 @@ var fixedElements = new WeakMap(),
         }
     },
   ],
-  createCache = function (options) {
-    var key = options.key;
-    if ("css" === key) {
-      var ssrStyles = document.querySelectorAll(
-        "style[data-emotion]:not([data-s])"
-      );
-      Array.prototype.forEach.call(ssrStyles, function (node) {
-        document.head.appendChild(node), node.setAttribute("data-s", "");
-      });
-    }
-    var container,
-      _insert,
-      stylisPlugins = options.stylisPlugins || defaultStylisPlugins,
-      inserted = {},
-      nodesToHydrate = [];
-    (container = options.container || document.head),
-      Array.prototype.forEach.call(
-        document.querySelectorAll("style[data-emotion]"),
-        function (node) {
-          var attrib = node.getAttribute("data-emotion").split(" ");
-          if (attrib[0] === key) {
-            for (var i = 1; i < attrib.length; i++) inserted[attrib[i]] = !0;
-            nodesToHydrate.push(node);
-          }
-        }
-      );
-    var currentSheet,
-      omnipresentPlugins = [compat, removeLabel],
-      finalizingPlugins = [
-        ue,
-        fe(function (rule) {
-          currentSheet.insert(rule);
-        }),
-      ],
-      serializer = (function (e) {
-        var r = M(e);
-        return function (a, c, n, t) {
-          for (var s = "", u = 0; u < r; u++) s += e[u](a, c, n, t) || "";
-          return s;
-        };
-      })(omnipresentPlugins.concat(stylisPlugins, finalizingPlugins));
-    _insert = function (selector, serialized, sheet, shouldCache) {
-      (currentSheet = sheet),
-        se(
-          ee(
-            selector
-              ? selector + "{" + serialized.styles + "}"
-              : serialized.styles
-          ),
-          serializer
-        ),
-        shouldCache && (cache.inserted[serialized.name] = !0);
-    };
-    var cache = {
-      key: key,
-      sheet: new StyleSheet({
-        key: key,
-        container: container,
-        nonce: options.nonce,
-        speedy: options.speedy,
-        prepend: options.prepend,
-      }),
-      nonce: options.nonce,
-      inserted: inserted,
-      registered: {},
-      insert: _insert,
-    };
-    return cache.sheet.hydrate(nodesToHydrate), cache;
-  };
-function createCommonjsModule(fn, basedir, module) {
-  return (
-    fn(
-      (module = {
-        path: basedir,
-        exports: {},
-        require: function (path, base) {
-          return (function () {
-            throw new Error(
-              "Dynamic requires are not currently supported by @rollup/plugin-commonjs"
-            );
-          })(
-            /** @license React v16.13.1
-             * react-is.production.min.js
-             *
-             * Copyright (c) Facebook, Inc. and its affiliates.
-             *
-             * This source code is licensed under the MIT license found in the
-             * LICENSE file in the root directory of this source tree.
-             */ null == base && module.path
-          );
-        },
-      }),
-      module.exports
-    ),
-    module.exports
-  );
-}
-var b = "function" == typeof Symbol && Symbol.for,
-  c$1 = b ? Symbol.for("react.element") : 60103,
-  d$1 = b ? Symbol.for("react.portal") : 60106,
-  e$1 = b ? Symbol.for("react.fragment") : 60107,
-  f = b ? Symbol.for("react.strict_mode") : 60108,
-  g$1 = b ? Symbol.for("react.profiler") : 60114,
-  h = b ? Symbol.for("react.provider") : 60109,
-  k$1 = b ? Symbol.for("react.context") : 60110,
-  l = b ? Symbol.for("react.async_mode") : 60111,
-  m$1 = b ? Symbol.for("react.concurrent_mode") : 60111,
-  n$1 = b ? Symbol.for("react.forward_ref") : 60112,
-  p$1 = b ? Symbol.for("react.suspense") : 60113,
-  q$1 = b ? Symbol.for("react.suspense_list") : 60120,
-  r$1 = b ? Symbol.for("react.memo") : 60115,
-  t$1 = b ? Symbol.for("react.lazy") : 60116,
-  v = b ? Symbol.for("react.block") : 60121,
-  w = b ? Symbol.for("react.fundamental") : 60117,
-  x$1 = b ? Symbol.for("react.responder") : 60118,
-  y$1 = b ? Symbol.for("react.scope") : 60119;
-function z$1(a) {
-  if ("object" == typeof a && null !== a) {
-    var u = a.$$typeof;
-    switch (u) {
-      case c$1:
-        switch ((a = a.type)) {
-          case l:
-          case m$1:
-          case e$1:
-          case g$1:
-          case f:
-          case p$1:
-            return a;
-          default:
-            switch ((a = a && a.$$typeof)) {
-              case k$1:
-              case n$1:
-              case t$1:
-              case r$1:
-              case h:
-                return a;
-              default:
-                return u;
+  ThemeContext =
+    (createContext(
+      "undefined" != typeof HTMLElement
+        ? (function (options) {
+            var key = options.key;
+            if ("css" === key) {
+              var ssrStyles = document.querySelectorAll(
+                "style[data-emotion]:not([data-s])"
+              );
+              Array.prototype.forEach.call(ssrStyles, function (node) {
+                document.head.appendChild(node),
+                  node.setAttribute("data-s", "");
+              });
             }
-        }
-      case d$1:
-        return u;
-    }
-  }
-}
-function A$1(a) {
-  return z$1(a) === m$1;
-}
-var reactIs_production_min = {
-    AsyncMode: l,
-    ConcurrentMode: m$1,
-    ContextConsumer: k$1,
-    ContextProvider: h,
-    Element: c$1,
-    ForwardRef: n$1,
-    Fragment: e$1,
-    Lazy: t$1,
-    Memo: r$1,
-    Portal: d$1,
-    Profiler: g$1,
-    StrictMode: f,
-    Suspense: p$1,
-    isAsyncMode: function (a) {
-      return A$1(a) || z$1(a) === l;
-    },
-    isConcurrentMode: A$1,
-    isContextConsumer: function (a) {
-      return z$1(a) === k$1;
-    },
-    isContextProvider: function (a) {
-      return z$1(a) === h;
-    },
-    isElement: function (a) {
-      return "object" == typeof a && null !== a && a.$$typeof === c$1;
-    },
-    isForwardRef: function (a) {
-      return z$1(a) === n$1;
-    },
-    isFragment: function (a) {
-      return z$1(a) === e$1;
-    },
-    isLazy: function (a) {
-      return z$1(a) === t$1;
-    },
-    isMemo: function (a) {
-      return z$1(a) === r$1;
-    },
-    isPortal: function (a) {
-      return z$1(a) === d$1;
-    },
-    isProfiler: function (a) {
-      return z$1(a) === g$1;
-    },
-    isStrictMode: function (a) {
-      return z$1(a) === f;
-    },
-    isSuspense: function (a) {
-      return z$1(a) === p$1;
-    },
-    isValidElementType: function (a) {
-      return (
-        "string" == typeof a ||
-        "function" == typeof a ||
-        a === e$1 ||
-        a === m$1 ||
-        a === g$1 ||
-        a === f ||
-        a === p$1 ||
-        a === q$1 ||
-        ("object" == typeof a &&
-          null !== a &&
-          (a.$$typeof === t$1 ||
-            a.$$typeof === r$1 ||
-            a.$$typeof === h ||
-            a.$$typeof === k$1 ||
-            a.$$typeof === n$1 ||
-            a.$$typeof === w ||
-            a.$$typeof === x$1 ||
-            a.$$typeof === y$1 ||
-            a.$$typeof === v))
-      );
-    },
-    typeOf: z$1,
-  },
-  reactIs =
-    (createCommonjsModule(function (module, exports) {}),
-    createCommonjsModule(function (module) {
-      module.exports = reactIs_production_min;
-    })),
-  TYPE_STATICS = {};
-(TYPE_STATICS[reactIs.ForwardRef] = {
-  $$typeof: !0,
-  render: !0,
-  defaultProps: !0,
-  displayName: !0,
-  propTypes: !0,
-}),
-  (TYPE_STATICS[reactIs.Memo] = {
-    $$typeof: !0,
-    compare: !0,
-    defaultProps: !0,
-    displayName: !0,
-    propTypes: !0,
-    type: !0,
-  }),
-  createContext(
-    "undefined" != typeof HTMLElement ? createCache({ key: "css" }) : null
-  ).Provider;
-var ThemeContext = createContext({});
-createCommonjsModule(function (module) {
-  function _extends() {
-    return (
-      (module.exports = _extends =
-        Object.assign ||
-        function (target) {
-          for (var i = 1; i < arguments.length; i++) {
-            var source = arguments[i];
-            for (var key in source)
-              Object.prototype.hasOwnProperty.call(source, key) &&
-                (target[key] = source[key]);
-          }
-          return target;
-        }),
-      _extends.apply(this, arguments)
-    );
-  }
-  module.exports = _extends;
-}),
-  console.log(function () {
-    return useContext(ThemeContext);
-  });
+            var container,
+              _insert,
+              stylisPlugins = options.stylisPlugins || defaultStylisPlugins,
+              inserted = {},
+              nodesToHydrate = [];
+            (container = options.container || document.head),
+              Array.prototype.forEach.call(
+                document.querySelectorAll("style[data-emotion]"),
+                function (node) {
+                  var attrib = node.getAttribute("data-emotion").split(" ");
+                  if (attrib[0] === key) {
+                    for (var i = 1; i < attrib.length; i++)
+                      inserted[attrib[i]] = !0;
+                    nodesToHydrate.push(node);
+                  }
+                }
+              );
+            var currentSheet,
+              omnipresentPlugins = [compat, removeLabel],
+              finalizingPlugins = [
+                ue,
+                fe(function (rule) {
+                  currentSheet.insert(rule);
+                }),
+              ],
+              serializer = (function (e) {
+                var r = M(e);
+                return function (a, c, n, t) {
+                  for (var s = "", u = 0; u < r; u++)
+                    s += e[u](a, c, n, t) || "";
+                  return s;
+                };
+              })(omnipresentPlugins.concat(stylisPlugins, finalizingPlugins));
+            _insert = function (selector, serialized, sheet, shouldCache) {
+              (currentSheet = sheet),
+                se(
+                  ee(
+                    selector
+                      ? selector + "{" + serialized.styles + "}"
+                      : serialized.styles
+                  ),
+                  serializer
+                ),
+                shouldCache && (cache.inserted[serialized.name] = !0);
+            };
+            var cache = {
+              key: key,
+              sheet: new StyleSheet({
+                key: key,
+                container: container,
+                nonce: options.nonce,
+                speedy: options.speedy,
+                prepend: options.prepend,
+              }),
+              nonce: options.nonce,
+              inserted: inserted,
+              registered: {},
+              insert: _insert,
+            };
+            return cache.sheet.hydrate(nodesToHydrate), cache;
+          })({ key: "css" })
+        : null
+    ).Provider,
+    createContext({}));
+console.log(function () {
+  return useContext(ThemeContext);
+});
